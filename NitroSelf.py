@@ -11,7 +11,7 @@ import logging
 import asyncio
 
 init()
-app_version = 'v1.0.12'
+app_version = 'v1.0.13'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -41,7 +41,8 @@ else:
     jdata.close()
     json.load(open(jfile))
 
-system('title Nitro.Self ' + app_version + ' - Developed by: Notorious')
+#system('title Nitro.Self ' + app_version + ' - Developed by: Notorious')
+print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious\a', end='', flush=True)
 
 triedC = []
 codeRegex = re.compile('(discord.com/gifts/|discordapp.com/gifts/|discord.gift/)([a-zA-Z0-9]+)')
@@ -97,7 +98,7 @@ async def on_message(message):
            delay = time.time() - start_time
            print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.GREEN + '+' + Fore.RESET + '] - redeemed nitro : ' + Fore.GREEN + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
            found += 1
-           system('title Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found))
+           print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found), end='', flush=True)
        elif 'This gift has been redeemed already.' in str(r):
            delay = time.time() - start_time
            print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTRED_EX + '-' + Fore.RESET + '] - already claimed : ' + Fore.LIGHTRED_EX + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
