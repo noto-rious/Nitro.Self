@@ -4,7 +4,7 @@
 
 Discord.py Self-Nitro Sniper.
 
-Written in Python 3.8.3
+Written in Python 3.8.5
 
 # Important
 
