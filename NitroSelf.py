@@ -7,7 +7,7 @@ from colored import fg, bg, attr
 import logging
 import asyncio, json, time, traceback
 
-app_version = 'v1.1.1'
+app_version = 'v1.1.2'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -58,7 +58,7 @@ print(" ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ �
 
 vlink = 'https://noto.cf/ns_ver.txt'
 f = requests.get(vlink)
-if f.text[1:].replace('.', '') > app_version[1:].replace('.', ''):
+if f.text != app_version:
     print(color3 + 'Looks like you may not be running the most current version. Check https://noto.cf/ for an update.\n' + res)
 
 jdata = json.load(open(jfile))
