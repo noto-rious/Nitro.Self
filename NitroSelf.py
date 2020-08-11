@@ -7,7 +7,7 @@ from colored import fg, bg, attr
 import logging
 import asyncio, json, time, traceback
 
-app_version = 'v1.1.0'
+app_version = 'v1.1.1'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -21,12 +21,11 @@ else:
         application_path = os.getcwd()
         running_mode = 'Interactive'
 
+os.system('cls' if os.name == 'nt' else 'clear')
+
 if os == 'Windows':
-    system('cls')
     jfile = application_path + '\\token.json'
 else:
-    system('clear')
-    print(chr(27) + '[2J')
     jfile = application_path + '/token.json'
 
 if os.path.exists(jfile):
