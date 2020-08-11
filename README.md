@@ -1,6 +1,6 @@
 # Nitro.Self
 
-<img src="https://noto.cf/nss112.png">
+<img src="https://github.com/noto-rious/Nitro.Self/blob/master/screenshot.png">
 
 Discord.py Self-Nitro Sniper.
 
