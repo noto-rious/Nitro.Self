@@ -7,7 +7,7 @@ from colored import fg, bg, attr
 import logging
 import asyncio, json, time, traceback
 
-app_version = 'v1.1.2'
+app_version = 'v1.1.3'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -93,7 +93,7 @@ while True:
                             triedC.append(str(codevariable))
                             r = requests.post('https://discordapp.com/api/v6/entitlements/gift-codes/' + codevariable + '/redeem',
                                 headers={'authorization': token}).text
-                            r = r.json()
+                            #r = r.json()
                         else:
                             delay = time.time() - start_time
                             print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color3 + 'x' + res + '] - fake code : ' + color3 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
