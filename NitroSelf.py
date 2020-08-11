@@ -1,17 +1,13 @@
-import time
-import discord
+from discord.ext import commands
 import requests
-import json
 import re
 import sys, os
 from os import system
-import colorama
-from colorama import Fore, Back, Style, init
+from colored import fg, bg, attr
 import logging
-import asyncio
+import asyncio, json, time, traceback
 
-init()
-app_version = 'v1.0.13'
+app_version = 'v1.1.0'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -47,17 +43,24 @@ print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious\a', end='
 triedC = []
 codeRegex = re.compile('(discord.com/gifts/|discordapp.com/gifts/|discord.gift/)([a-zA-Z0-9]+)')
 
-print(Fore.GREEN + " ███╗   ██╗██╗████████╗██████╗  ██████╗    ███████╗███████╗██╗     ███████╗")
+color1 = fg('#4EC98F')
+color2 = fg('#BA98E4')
+color3 = fg('#FF0000')
+color4 = fg('#FFC813')
+color5 = fg('#335BFF')
+res = attr('reset')
+
+print(color1 + " ███╗   ██╗██╗████████╗██████╗  ██████╗    ███████╗███████╗██╗     ███████╗")
 print(" ████╗  ██║██║╚══██╔══╝██╔══██╗██╔═══██╗   ██╔════╝██╔════╝██║     ██╔════╝")
 print(" ██╔██╗ ██║██║   ██║   ██████╔╝██║   ██║   ███████╗█████╗  ██║     █████╗  ")
 print(" ██║╚██╗██║██║   ██║   ██╔══██╗██║   ██║   ╚════██║██╔══╝  ██║     ██╔══╝  ")
 print(" ██║ ╚████║██║   ██║   ██║  ██║╚██████╔╝██╗███████║███████╗███████╗██║     ")
-print(" ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝╚══════╝╚═╝ " + app_version + "\n" + Fore.RESET)
+print(" ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝╚══════╝╚═╝ " + app_version + "\n" + res)
 
 vlink = 'https://noto.cf/ns_ver.txt'
 f = requests.get(vlink)
-if f.text != app_version and str(f.text[0]) == 'v':
-    print(Fore.LIGHTRED_EX + 'Looks like you may not be running the most current version. Check https://noto.cf/ for an update.\n' + Fore.RESET)
+if f.text[1:].replace('.', '') > app_version[1:].replace('.', ''):
+    print(color3 + 'Looks like you may not be running the most current version. Check https://noto.cf/ for an update.\n' + res)
 
 jdata = json.load(open(jfile))
 os.environ["rg"] = str(jdata['token'])
@@ -68,46 +71,57 @@ if token == "Token_Here":
         time.sleep(8)
         sys.exit()
 
-print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTBLUE_EX + '→' + Fore.RESET + '] - Listening for Nitro Codes...')
+bot = commands.Bot(command_prefix='.', self_bot=True)
+ready = False
 
-client = discord.Client()
+while True:
+    try:
+        @bot.event
+        async def on_message(message):
+            global ready
+            if not ready:
+                print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color5 + '→' + res + '] - Listening for Nitro Codes in ' + color2 + str(len(bot.guilds)) + res + ' servers...')
+                ready = True
+            else:
+                found = 0
+                r = ''
+                start_time = time.time()
+                if codeRegex.search(message.content):
+                    codevariable = codeRegex.search(message.content).group(2)
+                    print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color5 + '→' + res + '] - checking code : ' + color5 + codevariable + res)
+                    if codevariable not in triedC:
+                        if len(codevariable) == 16:
+                            triedC.append(str(codevariable))
+                            r = requests.post('https://discordapp.com/api/v6/entitlements/gift-codes/' + codevariable + '/redeem',
+                                headers={'authorization': token}).text
+                            r = r.json()
+                        else:
+                            delay = time.time() - start_time
+                            print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color3 + 'x' + res + '] - fake code : ' + color3 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
+                    else:
+                        delay = time.time() - start_time
+                        print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color3 + '-' + res + '] - duplicate code : ' + color3 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
+                        pass
+                    if 'nitro' in str(r):
+                        delay = time.time() - start_time
+                        print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color1 + '+' + res + '] - redeemed nitro : ' + color1 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
+                        found += 1
+                        print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found), end='', flush=True)
+                    elif 'This gift has been redeemed already.' in str(r):
+                        delay = time.time() - start_time
+                        print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color3 + '-' + res + '] - already claimed : ' + color3 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
+                    elif 'Unknown Gift Code' in str(r):
+                        delay = time.time() - start_time
+                        print('[' + color5 + time.strftime('%m/%d/%Y', time.localtime()).rstrip() + ' ' + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][' + color3 + '-' + res + '] - invalid code : ' + color3 + codevariable + res + ' - (Delay:' + color4 + ' %.3fs' % delay + res + ')')
+                    elif str(r) == '':
+                        pass
+                    else:
+                        print(r)
 
-@client.event
-async def on_message(message):
-    found = 0
-    r = ''
-    start_time = time.time()
-    if codeRegex.search(message.content):
-       codevariable = codeRegex.search(message.content).group(2)
-       print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTBLUE_EX + '→' + Fore.RESET + '] - checking code : ' + Fore.LIGHTBLUE_EX + codevariable + Fore.RESET)
-       if codevariable not in triedC:
-           if len(codevariable) == 16:
-                triedC.append(str(codevariable))
-                r = requests.post('https://discordapp.com/api/v6/entitlements/gift-codes/' + codevariable + '/redeem',
-                                    headers={'authorization': token})
-                r = r.json()
-           else:
-                delay = time.time() - start_time
-                print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTRED_EX + 'x' + Fore.RESET + '] - fake code : ' + Fore.LIGHTRED_EX + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
-       else:
-           delay = time.time() - start_time
-           print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTRED_EX + '-' + Fore.RESET + '] - duplicate code : ' + Fore.LIGHTRED_EX + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
-           pass
-       if 'nitro' in str(r):
 
-           delay = time.time() - start_time
-           print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.GREEN + '+' + Fore.RESET + '] - redeemed nitro : ' + Fore.GREEN + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
-           found += 1
-           print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found), end='', flush=True)
-       elif 'This gift has been redeemed already.' in str(r):
-           delay = time.time() - start_time
-           print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTRED_EX + '-' + Fore.RESET + '] - already claimed : ' + Fore.LIGHTRED_EX + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
-       elif 'Unknown Gift Code' in str(r):
-           delay = time.time() - start_time
-           print('[' + Fore.LIGHTBLUE_EX + time.strftime('%I:%M:%S %p',time.localtime()).rstrip() + Fore.RESET + '][' + Fore.LIGHTRED_EX + '-' + Fore.RESET + '] - invalid code : ' + Fore.LIGHTRED_EX + codevariable + Fore.RESET + ' - (Delay:' + Fore.YELLOW + ' %.3fs' % delay + Fore.RESET + ')')
-       elif str(r) == '':
-           pass
-       else:
-           print(r)
-
-client.run(token, bot=False)
+        bot.run(token, bot=False)
+    except:
+            file = open('Error-Log.txt', 'w')
+            file.write(traceback.format_exc())
+            file.close()
+            exit(0)
