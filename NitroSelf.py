@@ -8,7 +8,7 @@ import logging
 import asyncio, json, time, traceback
 from random import randint
 
-app_version = 'v1.2.1'
+app_version = 'v1.2.2'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -101,7 +101,7 @@ while True:
                 start_time = time.time()
                 if codeRegex.search(message.content):
                     codevariable = codeRegex.search(message.content).group(2)
-                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🔫] • Sniped Code: ' + color5 + codevariable + res + ' • [From: ' + color2 +  message.author.name + '#' + message.author.discriminator + res + ']')
+                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🔫] • Sniped Code: [' + color5 + codevariable + res + '] • [From: ' + color2 +  message.author.name + '#' + message.author.discriminator + res + ']')
                     if codevariable not in triedC:
                         if len(codevariable) == 16:
                             triedC.append(str(codevariable))
