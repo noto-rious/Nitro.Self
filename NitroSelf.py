@@ -148,7 +148,7 @@ while True:
                 elif (('**giveaway**' in str(message.content).lower() or ('react with' in str(message.content).lower() and 'giveaway' in str(message.content).lower()))) and str(message.guild.id)  not in blines and message.guild is not None:
                     try:
                         await asyncio.sleep(randint(100, 200))
-                        await message.add_reaction("' + wonc + '")
+                        await message.add_reaction("🎉")
                         print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + enteredg + '] • Entered Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + color7 + ']')
                     except:
                         print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + invalidc+ '] • Failed to enter Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + color7 + ']')
