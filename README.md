@@ -4,6 +4,8 @@
 
 Discord.py Self-Nitro Sniper.
 
+Features an anti-spam duplicate code detector to avoid being throttled.
+
 Written in Python 3.8.5
 
 # How to get your Authorization Token
