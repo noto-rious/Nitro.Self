@@ -4,7 +4,11 @@
 
 Discord.py Self-Nitro Sniper.
 
-Features an anti-spam duplicate code detector to avoid being throttled. Also features a blocked server list which allows you to ignore giveaways in specified servers. The format for this is GuildID. To get the guild id simply turn on developer mode on your client and then right click on the server you wish to ignore and click 'Copy ID'. Once you have the ID place it into a text file in the app folder named "blocklist.txt".
+Features an anti-spam duplicate code detector to avoid being throttled. 
+
+Also features a blocked server list which allows you to ignore giveaways in specified servers, The format for this is GuildID. 
+To get the guild id simply turn on developer mode on your client and then right click on the server you wish to ignore and click 'Copy ID'. 
+Once you have the ID place it into a text file in the app folder named "blocklist.txt".
 
 Written in Python 3.8.5
 
