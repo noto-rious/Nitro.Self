@@ -8,7 +8,7 @@ import logging
 import asyncio, json, time, traceback
 from random import randint
 
-app_version = 'v1.2.2'
+app_version = 'v1.2.3'
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -58,19 +58,35 @@ color3 = fg('#FF0000')
 color4 = fg('#FFC813')
 color5 = fg('#3890D4')
 color6 = fg('#E0FFFF')
+color7 = fg('#FFFFFF')
 res = attr('reset')
+
+if os.name == 'nt':
+    snipedc = color5 + '►' + color7
+    fakec = color2 + '✗' + color7
+    claimedc = color2 + '‼' + color7
+    invalidc = color2 + '✗' + color7
+    wonc = color1 +'✔' + color7
+    enteredg = color1 +'✔' + color7
+else:
+    snipedc = '🔫'
+    fakec = '📛'
+    claimedc = '❗'
+    invalidc = '⛔'
+    wonc = '🎉'
+    enteredg = '✅'
 
 print(color1 + " ███╗   ██╗██╗████████╗██████╗  ██████╗    ███████╗███████╗██╗     ███████╗")
 print(" ████╗  ██║██║╚══██╔══╝██╔══██╗██╔═══██╗   ██╔════╝██╔════╝██║     ██╔════╝")
 print(" ██╔██╗ ██║██║   ██║   ██████╔╝██║   ██║   ███████╗█████╗  ██║     █████╗  ")
 print(" ██║╚██╗██║██║   ██║   ██╔══██╗██║   ██║   ╚════██║██╔══╝  ██║     ██╔══╝  ")
 print(" ██║ ╚████║██║   ██║   ██║  ██║╚██████╔╝██╗███████║███████╗███████╗██║     ")
-print(" ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝╚══════╝╚═╝ " + app_version + "\n" + res)
+print(" ╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝╚══════╝╚═╝ " + app_version + "\n" + color7)
 
 vlink = 'https://noto.cf/ns_ver.txt'
 f = requests.get(vlink)
 if f.text != app_version:
-    print(color3 + 'Looks like you may not be running the most current version. Check https://noto.cf/ for an update.\n' + res)
+    print(color3 + 'Looks like you may not be running the most current version. Check https://noto.cf/ for an update.\n' + color7)
 
 jdata = json.load(open(jfile))
 os.environ["rg"] = str(jdata['token'])
@@ -78,11 +94,11 @@ token = str(jdata['token'])
 
 if token == "Token_Here":
         print ("You haven't properly configured the \'token.json\' file. Please put your Discord token in token.json using the correct JSON syntax and then run the program again.")
-        time.sleep(8)
+        time.sleep(15)
         sys.exit()
 
 blength = len(blines)-1
-print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🔫] • Blocked Servers Loaded: [' + color2 + str(f"{blength:,d}") + res + ']')
+print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + snipedc + '] • Blocked Servers Loaded: [' + color2 + str(f"{blength:,d}") + color7 + ']')
 
 bot = commands.Bot(command_prefix='.', self_bot=True)
 ready = False
@@ -93,7 +109,7 @@ while True:
         async def on_message(message):
             global ready
             if not ready:
-                print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🔫] • Listening for Nitro Codes in [' + color2 + str(len(bot.guilds)) + res + '] servers...')
+                print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + snipedc + '] • Listening for Nitro Codes & Giveaways in [' + color2 + str(len(bot.guilds)) + color7 + '] servers...')
                 ready = True
             else:
                 found = 0
@@ -101,7 +117,7 @@ while True:
                 start_time = time.time()
                 if codeRegex.search(message.content):
                     codevariable = codeRegex.search(message.content).group(2)
-                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🔫] • Sniped Code: [' + color5 + codevariable + res + '] • [From: ' + color2 +  message.author.name + '#' + message.author.discriminator + res + ']')
+                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + snipedc + '] • Sniped Code: [' + color5 + codevariable + color7 + '] • [From: ' + color2 +  message.author.name + '#{}'.format(message.author.discriminator) + color7 + ']')
                     if codevariable not in triedC:
                         if len(codevariable) == 16:
                             triedC.append(str(codevariable))
@@ -109,39 +125,39 @@ while True:
                                 json={"channel_id": str(message.channel.id)}, headers={'authorization': token}).text
                         else:
                             delay = time.time() - start_time
-                            print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][📛] • Fake Code: [' + color3 + codevariable + res + ']')
+                            print(color7 + '[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + fakec + '] • Fake Code Detected: [' + color3 + codevariable + color7 + ']')
                     else:
                         delay = time.time() - start_time
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][❗] • Duplicate Code: [' + color3 + codevariable + res + ']')
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + claimedc + '] • Duplicate Code: [' + color3 + codevariable + color7 + ']')
                         pass
                     if 'nitro' in str(r):
                         delay = time.time() - start_time
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🎉] • Nitro Redeemed: [' + color1 + codevariable + res + '] • [Delay:' + color4 + ' %.3fs' % delay + res + ']')
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + wonc + '] • Nitro Redeemed: [' + color1 + codevariable + color7 + '] • [Delay:' + color4 + ' %.3fs' % delay + color7 + ']')
                         found += 1
-                        print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found), end='', flush=True)
+                        print(f'\33]0;Nitro.Self ' + app_version + ' - Developed by: Notorious - Nitro Redeemed: ' + str(found) + "\a", end='', flush=True)
                     elif 'This gift has been redeemed already.' in str(r):
                         delay = time.time() - start_time
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][❗] • Code Already Claimed: [' + color3 + codevariable + res + '] • [Delay:' + color4 + ' %.3fs' % delay + res + ']')
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + claimedc + '] • Code Already Claimed: [' + color3 + codevariable + color7 + '] • [Delay:' + color4 + ' %.3fs' % delay + color7 + ']')
                     elif 'Unknown Gift Code' in str(r):
                         delay = time.time() - start_time
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][⛔] • Invalid Code: [' + color3 + codevariable + res + '] • [Delay:' + color4 + ' %.3fs' % delay + res + ']')
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + invalidc+ '] • Invalid Code: [' + color3 + codevariable + color7 + '] • [Delay:' + color4 + ' %.3fs' % delay + color7 + ']')
                     elif str(r) == '':
                         pass
                     else:
                         print(r)
-                elif (('**giveaway**' in str(message.content).lower() or ('react with' in str(message.content).lower() and 'giveaway' in str(message.content).lower()))) and str(message.guild.id)  not in blines:
+                elif (('**giveaway**' in str(message.content).lower() or ('react with' in str(message.content).lower() and 'giveaway' in str(message.content).lower()))) and str(message.guild.id)  not in blines and message.guild is not None:
                     try:
                         await asyncio.sleep(randint(100, 200))
-                        await message.add_reaction("🎉")
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][✅] • Entered Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + res + ']')
+                        await message.add_reaction("' + wonc + '")
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + enteredg + '] • Entered Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + color7 + ']')
                     except:
-                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][⛔] • Failed to enter Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + res + ']')
+                        print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + invalidc+ '] • Failed to enter Giveaway • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + color7 + ']')
                 elif '<@' + str(bot.user.id) + '>' in message.content and ('giveaway' in str(message.content).lower() or 'won' in str(message.content).lower() or 'winner' in str(message.content).lower()):
                     try:
                         won = re.search("You won the \*\*(.*)\*\*", message.content).group(1) # pylint: disable=anomalous-backslash-in-string
                     except:
                         won = "UNKNOWN"
-                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + res + '][🎉] • You Won a Giveaway: [' + color6 + won + res + '] • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + res + ']')
+                    print('[' + color5 + time.strftime('%I:%M:%S %p', time.localtime()).rstrip() + color7 + '][' + wonc + '] • You Won a Giveaway: [' + color6 + won + color7 + '] • [In: ' + color2 +  message.guild.name + ' > ' + message.channel.name + color7 + ']')
 
         bot.run(token, bot=False)
     except:
