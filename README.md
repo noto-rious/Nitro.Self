@@ -1,5 +1,7 @@
 # Nitro.Self
 
+<a href="https://github.com/noto-rious/Nitro.Self-V3">Check out the Multi-Account Go version here.</a>
+
 <a href="https://github.com/noto-rious/Nitro.Self/raw/master/screenshot.png"><img src="https://github.com/noto-rious/Nitro.Self/raw/master/screenshot.png" width="50%" height="50%" alt="Screenshot"></a>
 
 Discord.py Self-Nitro Sniper.
